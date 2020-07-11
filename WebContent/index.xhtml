@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+>
+<f:metadata>
+  <f:event type="preRenderView" listener="#{sRController.loadSkyResorts()}"/>
+</f:metadata>
+
+<h:head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	
+	<title>SkyResorts - Home</title>
+	
+	<link href="./asset/css/style.css" rel="stylesheet" type="text/css" />
+	
+</h:head>
+
+<h:body>
+ 		<div class="cover-img">
+        <img src="./asset/images/cover.jpg" alt="Cover foto" />
+    	</div>	
+	
+		<div class="nav-bar-cont">
+			<div class="left-nav-bar">
+				<ul>
+				<li><a><h:outputLink value="index.xhtml">Home</h:outputLink></a> </li>
+				
+				 <ui:repeat value="#{sRController.resorts}" var="temp">
+					<li>
+						<h:form>
+						<h:commandLink value="#{temp.name}"
+						action="#{mountainController.loadMountain(temp.id)}"/>
+						</h:form>
+					</li>
+				</ui:repeat>
+				
+				</ul>
+			</div>
+			<div class="right-nav-bar">
+				<ul><li><a ><h:outputLink value="about.xhtml">About</h:outputLink></a></li></ul>
+			</div>
+		</div>
+		<div class="home-cont">
+		    <div class="title-cont">
+		        <h2>Best Sky Resorts in Serbia</h2>
+		    </div>
+		    <div class="info-cont">
+		        <div class="img-div"></div>
+		        <div class="info-text">
+		            <p class="title">Wellcome to our website</p>
+		            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem dolorum reiciendis iusto natus eligendi quos, error nobis, earum sit adipisci repellendus eum laborum nulla explicabo reprehenderit? Blanditiis dignissimos nostrum iste molestiae cumque dolorum laudantium. Fugit dolor nisi unde blanditiis, nostrum recusandae voluptate corrupti, et optio suscipit molestias ab nemo aspernatur.</p>
+		        </div>
+			</div>
+		</div>
+
+	
+</h:body>
+</html>

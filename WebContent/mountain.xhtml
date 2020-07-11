@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.prime.com.tr/ui"
+>
+<f:metadata>
+  <f:event type="preRenderView" listener="#{trackController.loadTracks(mountainController.mountain.id)}"/>
+  <f:event type="preRenderView" listener="#{skyPassController.loadSkyPass(mountainController.mountain.id)}"/>
+  <f:event type="preRenderView" listener="#{weatherController.loadWeather(mountainController.mountain.id)}"/>
+  <f:event type="preRenderView" listener="#{sRController.loadSkyResorts()}"/>
+</f:metadata>
+
+<h:head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Mountain</title>
+	<h:outputStylesheet library="asset/css" name="mountain.css"  />
+	<link href="./asset/css/mountain.css" rel="stylesheet" type="text/css" />
+	
+</h:head>
+
+<h:body>
+		<div class="cover-img">
+        <img src="./asset/images/cover.jpg" alt="Cover foto" />
+    	</div>	
+		<div class="nav-bar-cont">
+			<div class="left-nav-bar">
+				<ul>
+				<li><a><h:outputLink value="index.xhtml">Home</h:outputLink></a> </li>
+				
+				 <ui:repeat value="#{sRController.resorts}" var="temp">
+					<li>
+						<h:form>
+						<h:commandLink value="#{temp.name}"
+						action="#{mountainController.loadMountain(temp.id)}"/>
+						</h:form>
+					</li>
+				</ui:repeat>
+				
+				</ul>
+			</div>
+			<div class="right-nav-bar">
+				<ul><li><a ><h:outputLink value="about.xhtml">About</h:outputLink></a></li></ul>
+			</div>
+		</div>
+
+	<div class="info-cont">
+	    <img class="img" src="#{mountainController.mountain.picture}" alt="Resort"/>
+	    <div class="info-text">
+	        <h2 class="title"><span>#{mountainController.mountain.name}</span>,#{mountain.country}</h2>
+	        <p>#{mountainController.mountain.description}</p>
+	        <p>Elevation  #{mountainController.mountain.highestPoint}  , Highest Point:  #{mountainController.mountain.highestPoint} , Top Elevation #{mountainController.mountain.topElevationM} </p>
+	    </div>
+	</div>
+<hr/>
+<div class="about-resort">
+    <ul>
+        <li><a id="cTracks" >Tracks</a></li>
+        <li><a id="cWeather" >Weather</a></li>
+        <li><a id="cSkiPass" >Ski pass</a></li>
+    </ul>
+    <div id="tracks">
+        <div id="tracks-cont">
+				<div class="table-div">
+				    <h:dataTable value="#{trackController.tracks}" var="temp"
+				    styleClass="demo-table"
+				>
+				<h:column>
+					<f:facet name="header">Name</f:facet>
+					#{temp.name}
+				</h:column>
+				<h:column>
+					<f:facet name="header">Lenght</f:facet>
+
+					#{temp.lenghtKM}
+				</h:column>
+				<h:column>
+					<f:facet name="header">Rating</f:facet>
+					#{temp.rating}
+				</h:column>
+			</h:dataTable>
+				</div>
+				<div class="sort-cont">
+				    <label for="sort">Sort By:</label>
+				    <h:form>
+				    <h:selectOneMenu value="#{trackController.sort}" onchange="submit()"
+							valueChangeListener="#{trackController.sortTable}">
+   							<f:selectItem itemLabel="" itemValue="nn" />
+   							<f:selectItem itemLabel="Rating" itemValue="rating" />
+   							<f:selectItem itemLabel="Lenght Km" itemValue="lenght_km" />
+					</h:selectOneMenu>
+					</h:form>
+				</div>
+		</div>
+    </div>
+    <div id="weather">
+    	<ul >
+	        <ui:repeat  value="#{weatherController.weather}" var="temp">
+	        <div class="content-weather-container">
+	          	<p><b>#{temp.date}</b></p>
+				<img width="150px" height="150px" src="#{temp.outlook}" />
+				<p>Min: #{temp.temp_min} &deg;C</p>
+				<p>Max: #{temp.temp_max} &deg;C</p>
+				<p>Wind: #{temp.wind}  km/h</p>
+				</div>
+	        </ui:repeat>
+        </ul>
+    </div>
+    <div id="ski-pass">
+  		<div class="ski-pass-cont">
+		  <div class="sky-table">
+		     <h:dataTable value="#{skyPassController.skypass}" var="temp"
+				  
+				>
+				<h:column style="border:1px solid black">
+					<f:facet name="header">Price:</f:facet>
+					#{temp.price}
+				</h:column>
+				<h:column>
+					<f:facet name="header">Duration:</f:facet>
+					#{temp.duration}
+				</h:column>
+			</h:dataTable>
+		  </div>
+  <div class="form-cont">
+    <h:form>
+    		Username: <h:inputText id="username" value="#{userInfo.username}" />
+			<br/><br/>
+			Full Name: <h:inputText id="fullName" value="#{userInfo.fullName}" />
+			<br/><br/>
+			From:<h:inputText value="#{userInfo.from}" converterMessage="Must be in yyyy-mm-dd" >
+				<f:convertDateTime pattern="yyyy-mm-dd"	/>
+			</h:inputText>
+			To:<h:inputText value="#{userInfo.to}" converterMessage="Must be in yyyy-mm-dd" >
+				<f:convertDateTime pattern="yyyy-mm-dd"	/>
+			</h:inputText>
+			<br/><br/>
+			<h:commandLink value="Reserve" action="#{reservationController.loadReservation(mountainController.mountain.id,userInfo)}" />
+    </h:form>
+    <p>Date Format: yyyy-MM-dd</p>
+  </div>
+  </div>
+    </div>
+</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<script type="text/javascript" src="./asset/js/main.js">
+<!--
+
+//-->
+</script>
+</h:body>
+</html>
+
